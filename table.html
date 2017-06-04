@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body>
+    <div>
+        <table id="tab">
+            <thead>
+                <tr>
+                    <th class="cour">姓名</th>
+                    <th class="cour">年龄</th>
+                    <th class="cour">区里</th>
+                    <th>性别</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>A</td>
+                    <td>12</td>
+                    <td>001</td>
+                    <td>男</td>
+                </tr>
+                <tr>
+                    <td>C</td>
+                    <td>21</td>
+                    <td>004</td>
+                    <td>男</td>
+                </tr>
+                <tr>
+                    <td>B</td>
+                    <td>9</td>
+                    <td>002</td>
+                    <td>男</td>
+                </tr>
+                <tr>
+                    <td>D</td>
+                    <td>5</td>
+                    <td>003</td>
+                    <td>男</td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+    <script type="text/javascript">
+        var tab = document.getElementById('tab');
+        var hea = tab.tHead;//获取表头
+        var oThs = hea.rows[0].cells;//获取第一行第一列
+        var bod = tab.tBodies[0];
+        var row = bod.rows;
+
+        // var xhr = new XMLHttpRequest();
+        // xhr.open("get","./css",true);
+        // xhr.onreadystatechange = function () {
+        //     // body
+        //     if(xhr.readyState === 4 && /^2\d{2}$/.test(xhr.status)){
+        //         var val = xhr.responseText();
+        //     }
+        // }
+        function changeBg() {
+            // body
+            for (var i = 0; i < row.length; i++) {
+                var element = row[i];
+                element.className = i % 2 === 0 ? "bg" : "";
+            }
+        }
+        changeBg();
+
+
+        //编写表格排序n
+        function mySort(n) {
+            // body
+            var _this = this;//this是oThs[1]
+            for (var k = 0; k < oThs.length; k++) {
+                var element = oThs[k];
+                if (element !== this) {
+                    _this.index = -1;//让每个元素的初始值为-1；避免点击其他的列影响
+                }
+
+            }
+            _this.index *= -1;
+
+            var ary = Array.prototype.slice.call(row);
+            ary.sort(function (a, b) {
+                var cureleNum = parseFloat(a.cells[n].innerHTML);
+                var nexeleNum = parseFloat(b.cells[n].innerHTML);
+                var curStr = a.cells[n].innerHTML;
+                var nexStr = b.cells[n].innerHTML;
+                if (isNaN(curStr) || isNaN(nexStr)) {
+                    return (curStr.localeCompare(nexStr)) * _this.index;
+                }
+                return (cureleNum - nexeleNum) * _this.index;
+                // 注意sort里面的的this和外面的this是不一样
+                // return (parseFloat(a.cells[1].innerHTML) - parseFloat(b.cells[1].innerHTML)) * _this.index;//sort方法是根据返回大于0或小于0来排序的
+            })
+            var flag = document.createDocumentFragment();
+            for (var i = 0; i < ary.length; i++) {
+                var element = ary[i];
+                flag.appendChild(element);
+            }
+            bod.appendChild(flag);
+            flag = null;
+            changeBg();
+        }
+        for (var i = 0; i < oThs.length; i++) {
+            var element = oThs[i];
+            if (element.className === "cour") {
+                element.index = -1;
+                element.count = i;//点击哪个就按  哪一列排序
+                element.onclick = function () {
+                    mySort.call(this, this.count);
+                }
+            }
+
+        }
+        // oThs[1].index = -1;//增加一个自定义属性
+        // oThs[1].onclick = function () {
+        //     mySort.call(this);
+        // }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul li {
+            list-style: none;
+            line-height: 30px;
+            width: 500px;
+            margin-left: 20px;
+            background-color: pink;
+            border-bottom: 1px dashed white;
+        }
+
+        ul li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+
+<body>
+    <ul id="box">
+        <li>1</li>
+        <li>5</li>
+        <li>6</li>
+        <li>9</li>
+        <li>2</li>
+    </ul>
+
+    <script type="text/javascript" charset="UTF-8">
+        //表格排序，把元素集合实现把类数组转换为数组
+        var box = document.getElementById('box');
+        var list = box.getElementsByTagName('li');
+        var ary = Array.prototype.slice.call(list);
+        ary.sort(function (a, b) {
+            // 数组才有sort方法，必须先转换
+            return parseFloat(a.innerHTML) - parseFloat(b.innerHTML);
+        });
+        var flag = document.createDocumentFragment();
+        for (var i = 0; i < ary.length; i++) {
+            var element = ary[i];
+            flag.appendChild(element);
+        }
+        console.log(flag);
+        box.appendChild(flag);//原理有5个，现在又追加5个，获取的元素和页面中的元素是绑定在一起的，重新追加，只是在调整原来的位置，因为他们是相互关联的
+        flag = null;
+        //DOM的映射机制，当元素发生改变，集合里面的内容会自动发生改变
+    </script>
+</body>
+
+</html>
